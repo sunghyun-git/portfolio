@@ -7,9 +7,11 @@
 <head>
 <meta charset="UTF-8">
 <title>회원 정보 수정</title>
+<link rel="stylesheet" href="/resources/css/main_view.css" type="text/css">
 <link rel="stylesheet" href="/resources/css/modify.css">
 <script src="/resources/js/jquery-3.6.0.min.js"></script>
 </head>
+<%@ include file="../includes/header2.jsp"%>
 <body>
 	<header>
 		<div class="text-area">

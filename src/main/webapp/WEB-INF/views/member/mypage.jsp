@@ -14,8 +14,9 @@
 
 
 </head>
-<body>
 <%@ include file="../includes/header2.jsp"%>
+<body>
+
 	<header>
 
 		</div>

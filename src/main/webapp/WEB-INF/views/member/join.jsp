@@ -6,12 +6,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
+	<link rel="stylesheet" href="/resources/css/main_view.css" type="text/css">
 
 <link rel="stylesheet" href="/resources/css/join.css">
+ 
 <script src="/resources/js/jquery-3.6.0.min.js"></script>
 <title>회원가입</title>
 </head>
+
+
 <body>
+
 	<!--header-->
 	<section class="join-form">
 		<br>

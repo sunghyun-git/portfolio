@@ -10,9 +10,15 @@
 <title>로그인</title>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
+	<link rel="stylesheet" href="/resources/css/main_view.css" type="text/css">
 	<link rel="stylesheet" href="/resources/css/login.css">
+	 
 </head>
+
+
  <body> 
+
         <!--header-->
         <section class="login-form"><br><br><br><br>
             <h1>잇! 슐랭</h1> 
