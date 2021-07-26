@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http::/mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.mapper.RestaurantAttachMapper">
+<insert id="insert">
+	insert into food_restaurant_attach (uuid, uploadPath, filename, filetype, cid)
+	values(#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{cid})
+</insert>
+
+<delete id="delete">
+	delete from food_restaurant_attach where cid = #{cid}
+</delete>
+
+<select id="findByBno" resultType="org.zerock.domain.RestaurantAttachVO">
+	select * from food_restaurant_attach where cid = #{cid}
+</select>
+
+<delete id="deleteAll">
+	delete from food_restaurant_attach where cid = #{cid}
+</delete>
+
+<select id="getOldFiles" resultType="org.zerock.domain.RestaurantAttachVO">
+	select * from food_restaurant_attach where uploadpath = CURDATE() - INTERVAL 1 DAY
+</select>
+</mapper>

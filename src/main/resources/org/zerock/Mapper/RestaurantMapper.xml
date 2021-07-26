@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http::/mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.mapper.RestaurantMapper">
+
+	
+
+	<select id="searchFood" resultType="org.zerock.domain.RestaurantVO">
+	select * from food_restaurant where address like CONCAT ('%',#{keyword},'%') or catename like CONCAT ('%',#{keyword},'%') or placename like  CONCAT ('%',#{keyword},'%') limit #{pageStart}, #{amount}
+	</select>
+	
+
+	<select id="getSearchCount" resultType="int">
+		select count(*) from food_restaurant where address like CONCAT ('%',#{keyword},'%') or catename like CONCAT ('%',#{keyword},'%') or placename like  CONCAT ('%',#{keyword},'%')
+	</select>
+	
+	<select id="readReview" resultType="org.zerock.domain.Restaurant_reviewVO">
+	select * from food_restaurant_review where rw_no = #{rw_no}
+	</select>
+	<!-- address 값에 해당하는 주소로 5개의 음식점 정보를 평점 순으로 가져옴 -->
+	<select id="topList" resultType="org.zerock.domain.RestaurantVO">
+		select * from food_restaurant where address like CONCAT ('%',#{address},'%') and  not mainphotourl is null ORDER BY rating desc limit 5 
+	</select>
+	
+	<!-- address값에 해당하는 키워드로 해당하는 카테고리에 10개의 음식점 정보를 평점 순으로 가져옴 -->
+	<select id="topListcat" resultType="org.zerock.domain.RestaurantVO">
+		select * from food_restaurant where catename like CONCAT ('%',#{address},'%') and  not mainphotourl is null ORDER BY rating desc limit 10
+	</select>
+		
+		<!-- 메인화면에서 보여줄 평점 순으로 나열한 6개의 음식점 정보 -->
+	<select id="orderByrating"  resultType="org.zerock.domain.RestaurantVO">
+		select * from food_restaurant where not mainphotourl is null ORDER BY rating desc limit 6
+	</select>
+	
+		<!-- 메인화면에서 보여줄 많이 본 순으로 나열한 6개의 음식점 정보 -->
+	<select id="orderByview" resultType="org.zerock.domain.RestaurantVO">
+		select * from food_restaurant where not mainphotourl is null ORDER BY views desc limit 6
+	</select>	
+	
+		<!-- 메인화면에서 보여줄 리뷰 많은 순으로 나열한 6개의 음식점 정보 -->
+	<select id="orderByreview" resultType="org.zerock.domain.RestaurantVO">
+		select * from food_restaurant where not mainphotourl is null ORDER BY reviewcount desc limit 6
+	</select>
+	<!-- DB에서 음식점 정보 읽어 오기 -->
+	<select id="readRestaurant"
+		resultType="org.zerock.domain.RestaurantVO">
+		select * from food_restaurant where cid = #{cid}
+	</select>
+
+	<!-- 음식점 오픈시간, 브레이크타임 읽어오기 -->
+	<select id="readRestaurant_open"
+		resultType="org.zerock.domain.Restaurant_openHourVO">
+		select * from food_restaurant_openHour where cid = #{cid}
+	</select>
+
+	<!-- 음식점 휴무일 읽어오기 -->
+	<select id="readRestaurant_off"
+		resultType="org.zerock.domain.Restaurant_offVO">
+		select * from food_restaurant_off where cid = #{cid}
+	</select>
+
+	<!-- 음식점 메뉴 읽어오기 -->
+	<select id="readRestaurant_menu"
+		resultType="org.zerock.domain.Restaurant_menuVO">
+		select * from food_restaurant_menu where cid=#{cid}
+	</select>
+
+	<!-- 음식점 리뷰 읽어오기 -->
+	<select id="readRestaurant_review"
+		resultType="org.zerock.domain.Restaurant_reviewVO">
+		select * from food_restaurant_review where cid=#{cid}
+	</select>
+
+	<!-- DB에 음식점 정보 저장 -->
+
+	<!-- 리뷰 저장 -->
+	<insert id="insertRestaurant_review" parameterType="org.zerock.domain.RestaurantVO" useGeneratedKeys="true" keyColumn="rw_no">
+		insert into food_restaurant_review
+		(cid, rw_writer, rw_content,
+		rw_photo, rw_rating, userid)
+		values (#{cid},
+		#{rw_writer}, #{rw_content},
+		#{rw_photo}, #{rw_rating}, #{userid})
+		<selectKey resultType="int" keyProperty="rw_no" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	
+	</insert>
+
+
+	<!-- 음식점 정보 저장 -->
+	<insert id="insertRestaurant" parameterType="org.zerock.domain.RestaurantVO" useGeneratedKeys="true" keyColumn="cid">
+		insert into food_restaurant (cid, address,
+		catename,
+		parking, placename, phonenum, mainphotourl)
+		values (#{cid},
+		#{address},
+		#{catename}, #{parking}, #{placename},
+		#{phonenum}, #{mainphotourl})
+		on
+		duplicate key update cid =cid
+			<selectKey resultType="int" keyProperty="cid" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+
+	<!-- 음식점 오픈시간,브레이크타임 등 저장 -->
+	<insert id="insertRestaurant_open">
+		insert into food_restaurant_openHour
+		(cid,
+		openhourDisplayText, periodName, timeName, timeSE, dayOfWeek)
+		value
+		(#{cid}, #{openhourDisplayText}, #{periodName}, #{timeName},
+		#{timeSE}, #{dayOfWeek})
+		on duplicate key update cid =cid
+	</insert>
+
+
+	<!-- 음식점 휴무 저장 -->
+	<insert id="insertRestaurant_off">
+		insert into food_restaurant_off
+		(cid, holydayName,
+		offdate)
+		value
+		(#{cid}, #{holydayName}, #{offdate})
+		on duplicate key
+		update cid =cid
+	</insert>
+
+	<!-- 음식점 메뉴 저장 -->
+	<insert id="insertRestaurant_menu">
+		insert into food_restaurant_menu
+		(cid, menu, price)
+		value
+		(#{cid}, #{menu}, #{price})
+		on duplicate key update cid =cid
+	</insert>
+
+	<!-- 음식점 정보 수정 -->
+	<update id="updateRestaurant">
+		update food_restaurant
+		set address = #{address},
+		catename = #{catename}, parking =
+		#{parking}, placename = #{placename},
+		phonenum = #{phonenum},
+		mainphotourl = #{mainphotourl}
+		where cid = #{cid}
+	</update>
+
+	<update id="updateRestaurant_open">
+		update food_restaurant_openHour
+		set
+		openhourDisplayText = #{openhourDisplayText}, periodName =
+		#{periodName}, timeName = #{timeName}, timeSE = #{timeSE}, dayOfWeek =
+		#{dayOfWeek}
+		where openHourindex = #{openHourindex}
+	</update>
+
+	<update id="updateRestaurant_off">
+		update food_restaurant_off
+		set holydayName =
+		#{holydayName}, offdate = #{offdate}
+		where offindex = #{offindex}
+
+	</update>
+
+	<update id="updateRestaurant_menu">
+		update food_restaurant_menu
+		set menu = #{menu}, price
+		= #{price}
+
+		where menuindex = #{menuindex}
+	</update>
+
+
+	<update id="updateRestaurant_review">
+		update food_restaurant_review
+		set rw_content =
+		#{rw_content}, rw_photo = #{rw_photo}, rw_rating = #{rw_rating}
+
+		where rw_no = #{rw_no}
+
+	</update>
+
+	<delete id="deleteRestaurant">
+		delete from food_restaurant where cid = #{cid}
+	</delete>
+
+	<delete id="deleteRestaurant_open">
+		delete from food_restaurant_openHour where
+		openHourindex = #{openHourindex}
+	</delete>
+
+	<delete id="deleteRestaurant_off">
+		delete from food_restaurant_off where offindex =
+		#{offindex}
+	</delete>
+
+	<delete id="deleteRestaurant_menu">
+		delete from food_restaurant_menu where menuindex =
+		#{menuindex}
+	</delete>
+
+	<delete id="deleteRestaurant_review">
+		delete from food_restaurant_review where rw_no =
+		#{rw_no}
+	</delete>
+	
+	<update id="updatereviewcount">
+	update food_restaurant set reviewcount = reviewcount + 1 where cid = #{cid}
+</update>
+
+	<update id="updateviewscount">
+	update food_restaurant set views= views + 1 where cid = #{cid}
+</update>
+
+<update id="updaterating">
+ update food_restaurant  set rating =(select avg(rw_rating) from food_restaurant_review where cid = food_restaurant.cid);
+</update>
+</mapper>

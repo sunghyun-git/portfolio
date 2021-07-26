@@ -1,0 +1,249 @@
+body{
+    margin: 0;
+    font-family: 'Jua', sans-serif;
+    background-color: #f7f1e3;
+}
+a{
+    text-decoration-line: none;
+    color: white;
+}
+.mainbar{
+    display: flex;
+    justify-content:space-between;
+    align-items:center;
+    background-color: #485460;
+    padding: 8px 12px;
+    height: 70px;
+}
+.mainbar ul{
+    padding: 0;
+}
+.mainbar_title{
+    font-size: 24px;
+    /* color:white; */
+    position: relative;
+    left: 23px;
+    /* text-align: center; */
+    display: inline-block;
+}
+.mainbar_title img{
+    width: 130px;
+    height: 140px;
+}
+.mainbar_title i{
+    color: #3c40c6;
+}
+.mainbar_join{
+    display: flex;
+    list-style: none;
+}
+.mainbar_join li{
+    padding: 8px 12px;
+}
+/* search 부분 */
+.search{
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 1px solid #485861;
+    height: 30px;
+    width: 50%;
+    border-radius: 35px;
+    padding: 5px;
+}
+.search_btn{
+    color: #485861;
+    float: right;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search_txt {
+    border: 1px solid red;
+    position: relative;
+    left: 20px;
+    top: 5px;
+    width: 610px;
+}
+ .category{
+
+    width: 180px;
+    text-align: center;
+    position: relative;
+    /* top: 7px; */
+} 
+/* .back_img{
+    /* border: 1px solid red; */
+    /* background-image: url(img/empty-wooden-cutting-board-with-cooking-ingredients-picture-id510566578\ \(339×509\).jpg);
+    position: relative;
+    top: 15px;
+    height: 520px;
+    width: 100%;
+} */
+.swiper-container {
+    /* border: 1px solid red; */
+    position:absolute;
+    top: 75px;
+    height: 450px;
+    width: 90%;
+     color:white;
+}    
+.img_set {
+    /* border: 1px solid red; */
+    position: relative;
+    top: 10px;
+    right: 55px;
+   
+}
+.img_1{
+    position: relative;
+    top: 45px;
+    right: 17px;
+}
+/* 텍스트 중앙정렬 해야됨(21/07/06) */
+.img1 {
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+.img2 {
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+.img3 {
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+.img_2{
+    position: absolute;
+    top: 230px;
+    left: 115px;
+}
+.img4{
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+.img5 {
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+.img6{
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+
+
+.img7 {
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+.img8 {
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+.img9 {
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+
+
+.img10{
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+.img11 {
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+.img12{
+    background-image: url(/img/food1.jpg);
+    height: 160px;
+    width: 360px;
+    background-size: 360px 160px;
+    text-align: center;
+    float: right;
+    margin: 0 3px;
+}
+
+
+
+/* .header_group{
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    background-color: #55efc4;
+} */
+/* .title{
+    display: table-cell;
+    text-align: center;
+    width: 100px;
+}
+.join{
+    display: table-cell;
+    position:absolute;
+    margin-left: 280px;
+}
+
+/* 
+
+ */
