@@ -3,6 +3,7 @@ package org.zerock.controller;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,18 +12,23 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.zerock.domain.MemberLikeVO;
 import org.zerock.domain.RestaurantAttachVO;
 import org.zerock.domain.RestaurantVO;
 import org.zerock.domain.Restaurant_menuVO;
 import org.zerock.domain.Restaurant_offVO;
 import org.zerock.domain.Restaurant_openHourVO;
 import org.zerock.domain.Restaurant_reviewVO;
+import org.zerock.service.MemberService;
 import org.zerock.service.RestaurantService;
 
 import lombok.AllArgsConstructor;
@@ -33,21 +39,23 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class RestaurantController {
 	private RestaurantService service;
-	
+	private MemberService memberservice;
+
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
 	@GetMapping("/register")
 	public void getregister() {
 
 	}
+
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
 	@PostMapping("/register")
 	public String postregister(RestaurantVO vo, RedirectAttributes rttr, HttpServletRequest request) {
 		log.info("================================");
 		log.info("register: " + vo);
 		service.registerRestaurant(vo);
-		log.info("asdfasdf"+service.getAttachList(vo.getCid()));
+		log.info("asdfasdf" + service.getAttachList(vo.getCid()));
 		if (service.getAttachList(vo.getCid()).isEmpty()) {
-			
+
 		} else {
 			List<RestaurantAttachVO> attach = service.getAttachList(vo.getCid());
 			RestaurantAttachVO asdf = attach.get(0);
@@ -59,7 +67,7 @@ public class RestaurantController {
 			vo.setMainphotourl(a);
 			service.modifyRestaurant(vo);
 		}
-		
+
 		String[] periodName = request.getParameterValues("periodName");
 		String[] timeName = request.getParameterValues("timeName");
 		String[] timeSE = request.getParameterValues("timeSE");
@@ -116,7 +124,7 @@ public class RestaurantController {
 
 		return "redirect:/restaurant?cid=" + vo.getCid();
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
 	@GetMapping("/modify")
 	public void getmodify(@RequestParam("cid") Integer cid, Model model) {
@@ -141,7 +149,7 @@ public class RestaurantController {
 	public String postmodify(RestaurantVO vo, HttpServletRequest request) {
 		vo.setCid(Integer.parseInt(request.getParameter("cid")));
 		if (service.getAttachList(vo.getCid()).isEmpty()) {
-			
+
 		} else {
 			List<RestaurantAttachVO> attach = service.getAttachList(vo.getCid());
 			RestaurantAttachVO asdf = attach.get(0);
@@ -153,7 +161,7 @@ public class RestaurantController {
 			vo.setMainphotourl(a);
 			service.modifyRestaurant(vo);
 		}
-		
+
 		String[] periodName = request.getParameterValues("periodName");
 		String[] timeName = request.getParameterValues("timeName");
 		String[] timeSE = request.getParameterValues("timeSE");
@@ -210,12 +218,25 @@ public class RestaurantController {
 
 		return "redirect:/restaurant?cid=" + vo.getCid();
 	}
-	
+
 	@GetMapping("/restaurant")
-	public void jsonParse(String error,Model model, HttpServletRequest request) {
-		model.addAttribute("error",error);
+	public void jsonParse(String error, Principal principal, Model model, HttpServletRequest request) {
+		model.addAttribute("error", error);
 		SimpleDateFormat DF = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Integer cid = Integer.parseInt(request.getParameter("cid"));
+		MemberLikeVO likevo = new MemberLikeVO();
+		likevo.setCid(cid);
+		if (isAuthenticated()) {
+			likevo.setUserid(principal.getName());
+			List<MemberLikeVO> List = memberservice.readlike(principal.getName());
+			for (int i = 0; i < List.size(); i++) {
+				MemberLikeVO vo = List.get(i);
+				if (vo.equals(likevo)) {
+					model.addAttribute("collect", "Y");
+				}
+
+			}
+		}
 		// service.getRestaurant(2030217673);
 		service.updateviewscount(cid);
 		model.addAttribute("Restaurant", service.getRestaurant(cid));
@@ -234,7 +255,7 @@ public class RestaurantController {
 
 		}
 	}
-	
+
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
 	@GetMapping("/delete")
 	public String delete(@RequestParam("cid") Integer cid, RedirectAttributes rttr) {
@@ -246,29 +267,37 @@ public class RestaurantController {
 
 		return "redirect:/";
 	}
-	
+
 	// 파일 삭제 함수
-		private void deleteFiles(List<RestaurantAttachVO> attachList) {
-			if (attachList == null || attachList.size() == 0) {
-				return;
-			}
-
-			log.info("delete attach files...................");
-			log.info(attachList);
-
-			attachList.forEach(attach -> {
-				try {
-					Path file = Paths.get("D:\\spring\\swork\\ex1234\\src\\main\\webapp\\resources\\img\\"
-							+ attach.getUploadPath() + "\\" + attach.getUuid() + "_" + attach.getFileName());
-					Files.deleteIfExists(file);
-					if (Files.probeContentType(file).startsWith("image")) {
-						Path thumbNail = Paths.get("D:\\spring\\swork\\ex1234\\src\\main\\webapp\\resources\\img\\"
-								+ attach.getUploadPath() + "\\s_" + attach.getUuid() + "_" + attach.getFileName());
-						Files.delete(thumbNail);
-					}
-				} catch (Exception e) {
-					log.error("delete file error" + e.getMessage());
-				} // end catch
-			});// end foreachd
+	private void deleteFiles(List<RestaurantAttachVO> attachList) {
+		if (attachList == null || attachList.size() == 0) {
+			return;
 		}
+
+		log.info("delete attach files...................");
+		log.info(attachList);
+
+		attachList.forEach(attach -> {
+			try {
+				Path file = Paths.get("D:\\spring\\swork\\ex1234\\src\\main\\webapp\\resources\\img\\"
+						+ attach.getUploadPath() + "\\" + attach.getUuid() + "_" + attach.getFileName());
+				Files.deleteIfExists(file);
+				if (Files.probeContentType(file).startsWith("image")) {
+					Path thumbNail = Paths.get("D:\\spring\\swork\\ex1234\\src\\main\\webapp\\resources\\img\\"
+							+ attach.getUploadPath() + "\\s_" + attach.getUuid() + "_" + attach.getFileName());
+					Files.delete(thumbNail);
+				}
+			} catch (Exception e) {
+				log.error("delete file error" + e.getMessage());
+			} // end catch
+		});// end foreachd
+	}
+	private boolean isAuthenticated() {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    if (authentication == null || AnonymousAuthenticationToken.class.
+	      isAssignableFrom(authentication.getClass())) {
+	        return false;
+	    }
+	    return authentication.isAuthenticated();
+	}
 }

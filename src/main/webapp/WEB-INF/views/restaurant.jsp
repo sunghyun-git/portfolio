@@ -43,6 +43,16 @@
 ${Restaurant.phonenum}
 
 </c:if>
+<sec:authorize access="isAuthenticated()">
+<br>
+<c:if test="${collect == null }">
+<a href="../member/likeinsert?cid=${Restaurant.cid }">좋아요</a>
+</c:if>
+<c:if test="${collect eq 'Y' }">
+<a href="../member/likedelete?cid=${Restaurant.cid }">좋아요 취소</a>
+</c:if>
+<br>
+</sec:authorize>
 	<div id="map" style="width:350px;height:350px;" ></div>
 	<script type="text/javascript"
 		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ddfa64a774c1422fb95b40bd0dc99e12&libraries=services"></script>

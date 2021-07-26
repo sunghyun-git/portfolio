@@ -41,4 +41,18 @@ where userid = #{userid}
 select count(*) from food_member where userid = #{userid}
 </select>
 
+<select id="readlike" resultType="org.zerock.domain.MemberLikeVO">
+select * from food_member_like
+where userid=#{userid}
+</select>
+
+<insert id="insertlike">
+insert into food_member_like 
+(userid, cid)
+value
+(#{userid}, #{cid})
+</insert>
+<delete id="deletelike">
+delete from food_member_like where userid = #{userid} and cid=#{cid}
+</delete>
 </mapper>

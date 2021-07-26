@@ -65,7 +65,7 @@
             </c:if>
             <c:if test="${count != 0 }">
             
-            <div id="map" style="width:100%;height:350px;"></div>
+            <div id="map" align="right" style="align-content:center; width:100%;height:600px; "></div>
             </c:if>
              <c:forEach var="restaurant" items="${list}">
         <ul class="list" onclick="location.href='../restaurant?cid=${restaurant.cid }'">
@@ -86,7 +86,12 @@
       
             <div class="name">
             <input type="hidden" name="placeadd" value="${restaurant.address }">
+            <input type="hidden" name="placecid" value="${restaurant.cid }">
             <input type="hidden" name="placena" value="${restaurant.placename}">
+            <input type="hidden" name="photo" value="${restaurant.mainphotourl}">
+            <input type="hidden" name="views" value="${restaurant.views}">
+            <input type="hidden" name="rating" value="${restaurant.rating }">
+            <input type="hidden" name="catename" value="${restaurant.catename }">
             <h1><c:out value="${restaurant.placename}"/> <c:out value="${restaurant.rating}"/> </h1>
              <c:out value="${restaurant.catename} | "/><c:out value="${restaurant.phonenum}"/> <br>
              <c:out value="${restaurant.address}"/><br>
@@ -172,7 +177,7 @@ function go(){
  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ddfa64a774c1422fb95b40bd0dc99e12&libraries=services,clusterer,drawing"></script>
  
  <script>
-
+ 
 	 
 	 var grpl = $("input[name=placeadd]").length;
 		//배열 생성
@@ -185,14 +190,39 @@ function go(){
 		
 		 var grpl1 = $("input[name=placena]").length;
 			//배열 생성
-		var placena = new Array(grpl);
+		var placena = new Array(grpl1);
 			//배열에 값 주입
 			for(var i=0; i<grpl; i++){                          
 				placena[i] = $("input[name=placena]").eq(i).val();
 		        console.log(placena[i]);
 		    }
-
- 
+		var grpl2 = $("input[name=placecid]").length;	
+		var placecid = new Array(grpl2);
+		for(var i=0; i<grpl2;i++){
+			placecid[i] = $("input[name=placecid]").eq(i).val();
+			console.log(placecid[i]);
+		}
+		
+		var grpl3 = $("input[name=photo]").length;
+ 		var photo = new Array(grpl3);
+ 		for(var i=0; i<grpl3 ; i++){
+ 			photo[i] = $("input[name=photo]").eq(i).val();
+ 			
+ 		}
+ 		
+ 		var grpl4 = $("input[name=rating]").length;
+ 		var rating = new Array(grpl4);
+ 		for(var i=0; i<grpl4 ; i++){
+ 			rating[i] = $("input[name=rating]").eq(i).val();
+ 		}
+ 		var grpl5 = $("input[name=catename]").length;
+ 		var catename = new Array(grpl5);
+ 		for(var i=0; i<grpl5; i++){
+ 			catename[i] = $("input[name=catename]").eq(i).val();
+ 			console.log(catename[i]);
+ 		}
+ 		
+ 		
  
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
     mapOption = { 
@@ -208,8 +238,10 @@ var geocoder = new kakao.maps.services.Geocoder();
 
 
 //주소로 좌표를 검색합니다	 
-for(var i= 0; i<placeaddress.length; i++ ){
-geocoder.addressSearch(placeaddress[i], function(result, status) {
+placeaddress.forEach(function(addr,index){
+	
+
+geocoder.addressSearch(addr, function(result, status) {
 	
     // 정상적으로 검색이 완료됐으면 
      if (status === kakao.maps.services.Status.OK) {
@@ -218,7 +250,7 @@ geocoder.addressSearch(placeaddress[i], function(result, status) {
      var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
         
         
-        	 // 마커 이미지의 이미지 크기 입니다
+        	 // 마커 이미지의 이미지 크기 입니다	
         	 var imageSize = new kakao.maps.Size(24, 35); 
 
         	 // 마커 이미지를 생성합니다    
@@ -230,13 +262,20 @@ geocoder.addressSearch(placeaddress[i], function(result, status) {
             position: coords,
             
         });
-        for(var j=0; i=placeaddress.length && j<placena.length ; j++){
+        
         kakao.maps.event.addListener(marker, 'click', function() {
             // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
-            infowindow.setContent('<div style="padding:5px;font-size:12px;">' +placena[j] + '</div>');
+            if(photo[index] == ""){
+                infowindow.setContent('<a href="../restaurant?cid='+placecid[index]+'"><div style="width:auto;height:auto;padding:5px;font-size:15px; color:black;">' +placena[index] +' '+rating[index] + '<br>'+catename[index]+'</div><br> <img src="/resources/img/eatchelin.png" height="150" width="150"> <a>');
+            }
+            else{
+                infowindow.setContent('<a href="../restaurant?cid='+placecid[index]+'"><div style="width:auto;height:auto;padding:5px;font-size:15px; color:black;">' +placena[index] +' '+rating[index] +'<br>'+catename[index]+'</div> <br><img src="'+photo[index]+'" height="150" width="150"> <a>');
+
+            }
             infowindow.open(map, marker);
+            map.setCenter(coords);
         });
-        }
+        
       
         
         
@@ -247,7 +286,11 @@ geocoder.addressSearch(placeaddress[i], function(result, status) {
     	
      }
   });
-}
+});
+geocoder.addressSearch(placeaddress[0], function(result, status) {
+	var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+	map.setCenter(coords);
+});
 
 
 

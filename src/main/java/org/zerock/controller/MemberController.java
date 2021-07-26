@@ -3,7 +3,9 @@ package org.zerock.controller;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,8 +23,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.zerock.domain.MemberLikeVO;
 import org.zerock.domain.MemberVO;
+import org.zerock.domain.RestaurantVO;
 import org.zerock.service.MemberService;
+import org.zerock.service.RestaurantService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -33,8 +38,39 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 public class MemberController {
 	private MemberService service;
+	private RestaurantService Rservice;
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/bookmark")
+	public void bookmark(Principal principal,Model model) {
+		model.addAttribute("member",service.read(principal.getName()));
+		List<MemberLikeVO> LikeList = service.readlike(principal.getName());
+		List<RestaurantVO> RList = new ArrayList<RestaurantVO>();
+		for(int i = 0; i < LikeList.size() ; i++) {
+			RList.add(i, Rservice.getRestaurant(LikeList.get(i).getCid()));
+		}
+		model.addAttribute("RList",RList);
+	}
 	
-	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/likeinsert")
+	public String insertlike(Principal principal,Model model,@RequestParam("cid") Integer cid){
+		
+		MemberLikeVO vo = new MemberLikeVO();
+		vo.setUserid(principal.getName());
+		vo.setCid(cid);
+		service.insertlike(vo);
+		log.info("memberlike : " +vo);
+		return "redirect:/restaurant?cid="+cid;
+	}
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/likedelete")
+	public String deletelike(Principal principal,Model model,@RequestParam("cid") Integer cid){
+		MemberLikeVO vo = new MemberLikeVO();
+		vo.setUserid(principal.getName());
+		vo.setCid(cid);
+		service.deletelike(vo);
+		return "redirect:/restaurant?cid="+cid;
+	}
 	
 	@ResponseBody 
 	@RequestMapping(value = "/idCheck", method = RequestMethod.POST)

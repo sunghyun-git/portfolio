@@ -219,4 +219,5 @@
 <update id="updaterating">
  update food_restaurant  set rating =(select avg(rw_rating) from food_restaurant_review where cid = food_restaurant.cid);
 </update>
+
 </mapper>
