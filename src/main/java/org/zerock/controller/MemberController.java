@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,6 +40,46 @@ import lombok.extern.log4j.Log4j;
 public class MemberController {
 	private MemberService service;
 	private RestaurantService Rservice;
+	
+	
+	@GetMapping("/findid")
+	public void findIdGet() {
+		
+	}
+	@PostMapping("/findid")
+	public String findIdPost(HttpServletRequest request,HttpServletResponse response,Model model)throws Exception {
+		MemberVO vo = new MemberVO();
+		vo.setUsername(request.getParameter("username"));
+		vo.setEmail(request.getParameter("email"));
+		response.setContentType("text/html; charset=UTF-8");
+		String id =service.findid(vo, response);
+		model.addAttribute("userid",id);
+		
+		return "/member/find_id";
+	}
+	@PostMapping("/find_id")
+	public String find_id(HttpServletRequest request,RedirectAttributes rttr) {
+		String userid = request.getParameter("userid");
+		
+		rttr.addFlashAttribute("result",userid);
+		return "redirect:/member/login"; 
+	}
+	@GetMapping("/findpw")
+	public void findPwGet() {
+		
+	}
+	
+	@PostMapping("/findpw")
+	public void findPwPost(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		MemberVO vo =new MemberVO();
+		vo.setUserid(request.getParameter("userid"));
+		vo.setEmail(request.getParameter("email"));
+		response.setContentType("text/html; charset=UTF-8");
+		service.findPw(vo, response);
+	}
+	
+	
+	
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/bookmark")
 	public void bookmark(Principal principal,Model model) {

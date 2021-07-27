@@ -55,4 +55,12 @@ value
 <delete id="deletelike">
 delete from food_member_like where userid = #{userid} and cid=#{cid}
 </delete>
+
+<update id="updatePw">
+update food_member set pwd = #{pwd} where userid = #{userid}
+</update>
+
+<select id="findid" resultMap="memberMap">
+select * from food_member where username = #{username} and email = #{email}
+</select>
 </mapper>

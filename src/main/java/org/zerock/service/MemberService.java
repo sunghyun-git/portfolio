@@ -2,6 +2,8 @@ package org.zerock.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.zerock.domain.MemberLikeVO;
 import org.zerock.domain.MemberVO;
 
@@ -16,4 +18,10 @@ public interface MemberService {
 	public void insertlike(MemberLikeVO memberlikevo);
 	
 	public void deletelike(MemberLikeVO memberlikevo);
+	//이메일발송
+	public void sendEmail(MemberVO vo,String div) throws Exception;
+	//비밀번호 찾기
+	public void findPw(MemberVO vo,HttpServletResponse response) throws Exception;
+	
+	public String findid(MemberVO vo,HttpServletResponse response) throws Exception;
 }

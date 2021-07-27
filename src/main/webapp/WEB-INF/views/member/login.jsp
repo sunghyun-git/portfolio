@@ -38,7 +38,9 @@
                 </div>
                 <!--아이디 비밀번호 찾기 캡션-->
                 <div class="caption">
-                    <a href="">아이디/비밀번호 찾기</a>
+                	<a href="/member/findid">아이디 찾기 </a> /
+                    <a href="/member/findpw"> 비밀번호 찾기</a>
+                    
                 </div>
                 <!--로그인 회원가입 버튼-->
                     <input type="submit" value="로그인">  

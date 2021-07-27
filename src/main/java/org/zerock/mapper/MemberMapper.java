@@ -15,6 +15,7 @@ public interface MemberMapper {
 	public void insertlike(MemberLikeVO memberlikevo);
 	
 	public void deletelike(MemberLikeVO memberlikevo);
-	
-	
+	//비밀번호 찾기 (바꾸기)
+	public void updatePw(MemberVO vo) throws Exception;
+	public MemberVO findid(MemberVO vo) throws Exception;
 }
