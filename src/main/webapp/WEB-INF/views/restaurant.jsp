@@ -52,6 +52,14 @@
 		<div class="imf">
 			<h2>${Restaurant.placename }(${Restaurant.catename })
 				(${Restaurant.views }) ${Restaurant.rating }</h2>
+				<br>
+<c:if test="${collect == null }">
+(${Restaurant.likecount })&nbsp;<a href="../member/likeinsert?cid=${Restaurant.cid }" style="color:black; font-size:30px;" >☆</a>
+</c:if>
+<c:if test="${collect eq 'Y' }">
+(${Restaurant.likecount })&nbsp; <a href="../member/likedelete?cid=${Restaurant.cid }" style="color:black; font-size:30px;">★</a>
+</c:if>
+<br>
 			<br> ${Restaurant.address} <br>
 			<c:if test="${Restaurant.parking eq 'Y' }">
 				<h5>주차 가능</h5>
