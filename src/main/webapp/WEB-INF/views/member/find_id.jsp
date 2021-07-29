@@ -27,7 +27,7 @@
                 <!--아이디 비밀번호 찾기 캡션-->
                 
                 <!--로그인 회원가입 버튼-->
-                    
+                    <input type="button" value="비밀번호 찾기" onclick="location.href='/member/findpw?userid=${userid }'">
                     <input type="submit" value="로그인으로" >
                 </form>
 </section>

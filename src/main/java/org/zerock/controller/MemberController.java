@@ -69,16 +69,18 @@ public class MemberController {
 	}
 
 	@GetMapping("/findpw")
-	public void findPwGet() {
-
+	public void findPwGet(HttpServletRequest request,Model model ) {
+		
+		model.addAttribute("result",request.getParameter("userid"));
 	}
 
 	@PostMapping("/findpw")
-	public void findPwPost(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void findPwPost(RedirectAttributes rttr,	HttpServletRequest request, HttpServletResponse response) throws Exception {
 		MemberVO vo = new MemberVO();
 		vo.setUserid(request.getParameter("userid"));
 		vo.setEmail(request.getParameter("email"));
 		response.setContentType("text/html; charset=UTF-8");
+		rttr.addFlashAttribute("result", vo.getUserid());
 		service.findPw(vo, response);
 	}
 
@@ -299,7 +301,10 @@ public class MemberController {
 	}
 
 	@GetMapping("/login")
-	public String login(Model model, String error, String logout) {
+	public String login(Model model, String error, String logout,HttpServletRequest request) {
+		if(request.getParameter("userid") !=null) {
+			model.addAttribute("result",request.getParameter("userid"));
+		}
 		if (isAuthenticated()) {
 			return "redirect:/";
 		}

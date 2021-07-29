@@ -70,8 +70,8 @@ public class MemberServiceImpl implements MemberService {
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		MemberVO ck= mapper.findid(vo);
-		String userid = ck.getUserid();
-		if (userid == null) {
+		
+		if (ck == null) {
 			out.println("<script>");
 			out.println("alert('가입된 아이디가 없습니다.');");
 			out.println("history.go(-1);");
@@ -79,11 +79,8 @@ public class MemberServiceImpl implements MemberService {
 			out.close();
 			return null;
 		} else {
-			return userid;
+			return ck.getUserid();
 		}
-
-
-
 
 	}
 	// 이메일발송
@@ -165,7 +162,7 @@ public class MemberServiceImpl implements MemberService {
 			update(vo);
 			// 비밀번호 변경 메일 발송
 			
-			out.print("<script>alert('이메일로 임시 비밀번호를 발송하였습니다.'); location.href='/member/login';</script>");
+			out.print("<script>alert('이메일로 임시 비밀번호를 발송하였습니다.'); location.href='/member/login?userid="+vo.getUserid()+"';</script>");
 			out.close();
 		}
 	}

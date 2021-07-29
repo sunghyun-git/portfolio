@@ -63,12 +63,13 @@ public class RestaurantReviewController {
 	public String reviewRegister(Restaurant_reviewVO reviewvo, RedirectAttributes rttr, HttpServletRequest request) {
 
 		for (int i = 1; i < 6; i++) {
-
+			reviewvo.setRw_rating(0.0);
 			if (request.getParameter("rating" + i) == null) {
 				break;
 			}
 			reviewvo.setRw_rating(Double.parseDouble(request.getParameter("rating" + i)));
 		}
+		
 		reviewvo.setUserid(request.getParameter("userid"));
 		reviewvo.setCid(Integer.parseInt(request.getParameter("cid")));
 		service.registerRestaurantReview(reviewvo);

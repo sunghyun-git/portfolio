@@ -24,6 +24,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
 	rel="stylesheet">
 <script src="/resources/js/jquery-3.6.0.min.js"></script>
+
+<style>
+
+  .list {
+    margin-top: 50px;
+    text-align: center;
+    background-color: #8295a0;
+  }
+  .list img{
+    border-radius: 50%;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.1),
+      0 12px 24px 0 rgba(0, 0, 0, 0.24);
+    margin-bottom: 2%;
+  }
+  .name h1{
+      margin-bottom: 1%;
+  }
+  </style>
 </head>
 <!-- 메인화면 -->
 <body>
@@ -163,7 +184,8 @@
 	<div class="food_recommend">
 		평점순 <br>
 		<c:forEach var="restaurant" items="${list}">
-			<a href="../restaurant?cid=${restaurant.cid }"> <img
+		<div class="list">
+			<a  href="../restaurant?cid=${restaurant.cid }"> <img 
 				src="<c:out value="${restaurant.mainphotourl}"/>" height="160px"
 				width="360px" />
 				<div class="name">
@@ -178,6 +200,7 @@
 					<br>
 				</div>
 			</a>
+			</div>
 		</c:forEach>
 	</div>
 	<hr style="margin-top: 80px">
@@ -186,7 +209,8 @@
 	조회수 높은 순
 	<div class="food_recommend">
 		<c:forEach var="restaurant" items="${list1}">
-			<a href="../restaurant?cid=${restaurant.cid }"> <img
+		<div class="list">
+			<a  href="../restaurant?cid=${restaurant.cid }"> <img 
 				src="<c:out value="${restaurant.mainphotourl}"/>" height="160px"
 				width="360px" />
 				<div class="name">
@@ -199,6 +223,7 @@
 					<c:out value="${restaurant.catename}" />
 				</div>
 			</a>
+			</div>
 		</c:forEach>
 	</div>
 
@@ -208,7 +233,8 @@
 	댓글 많은 순
 	<div class="food_recommend">
 		<c:forEach var="restaurant" items="${list2}">
-			<a href="../restaurant?cid=${restaurant.cid }"> <img
+		<div class="list">
+			<a  href="../restaurant?cid=${restaurant.cid }"> <img
 				src="<c:out value="${restaurant.mainphotourl}"/>" height="160px"
 				width="360px" />
 				<div class="name">
@@ -222,6 +248,7 @@
 
 				</div>
 			</a>
+			</div>
 		</c:forEach>
 	</div>
 
