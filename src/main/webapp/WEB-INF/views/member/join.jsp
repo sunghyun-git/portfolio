@@ -33,6 +33,7 @@
 			<!--아이디 체크 버튼 -->
 			<input type="button" name="user_IDcheck" value="아이디 중복 확인"
 				id="idCheck" value="N" onclick="fn_idCheck();"> <br>
+				<input type="hidden" name="idCheck1" id="idCheck1" value="N">
 			<!--비밀번호-->
 			<div class="int-area">
 				* 비밀번호<br> <input type="password" name="pwd" id="pwd">
@@ -198,7 +199,16 @@
 						<option value="yahoo.co.kr">
 					
 					</datalist>
+					
+					
                 </div>
+                <input type="hidden" name="emailCheck1" id="emailCheck1" value="N">
+                <input type="button" name="user_EmailCheck" value="이메일 중복 확인"
+				id="emailCheck" value="N" onclick="fn_emailCheck();"> <br>
+				<input type="button" name="emailcertification" value="이메일 인증"
+				id ="emailcertification" onclick="fn_emailcertification();">
+				<input type="hidden" name="emailcerti" id="emailcerti">
+				<div id="parah1"></div>
                 </div>
             <!--이용약관동의-->
             <fieldset>
@@ -221,6 +231,128 @@
           </body>
           
           <script type="text/javascript">
+          var arrInput1 = new Array(0);
+          var arrInputValue1 = new Array(0);
+          function display1() {
+        	  document.getElementById('parah1').innerHTML="";
+        	  for (intI=0;intI<arrInput1.length;intI++) {
+        	    document.getElementById('parah1').innerHTML+=createInput1(arrInput1[intI], arrInputValue1[intI]);
+        	  }
+        	  }
+          function createInput1(id,value) {
+        	  return "<input type='text' name='emailcerti1' id='emailcerti1' onChange='javascript:saveValue("+ id +",this.value)' placeholder='인증번호 입력' style='background:transparent; border:none; border-bottom: solid 1px #ccc; padding: -10px 5px 10px; font-size:14pt; width: 325px; height: 1%; margin-top: 10px; margin-bottom: 10px;'><br>" 
+          }
+          function fn_emailcertification(){
+        	  var email1 = $('#email1').val();
+        	  var email2 = $('#email2').val();
+        	  var userid = $('#userid').val();
+        	  var checkid = /^[a-zA-Z0-9]{4,12}$/;
+        	  if(!checkid.test(userid)){
+        		  alert("인증을 위해 아이디를 입력하세요.");
+        		  document.getElementById('userid').focus();
+        	  }
+        	  else if(email1 == ''){
+        		  alert('이메일을 입력하세요.');
+        		  document.getElementById('email1').focus();
+        	  }
+        	  else if(email2 ==''){
+        		  alert('도메인을 입력하세요');
+        		  document.getElementById('email2').focus();
+        	  }
+        	  else if ($('#emailCheck1').val()=='N'){
+        		  alert('이메일 중복 체크를 해주세요.');
+        	  }
+        	  else if($('#emailCheck1').val()=='Y'){
+        		  $.ajax({
+          		  	url : "/member/emailcertification",
+          			type : "post",
+          			
+          			data : { 
+          				email1 : $("#email1").val(),
+          				email2 : $("#email2").val(),
+          				userid : $('#userid').val()
+          				},
+        				beforeSend : function(xhr){
+        					var $token = $("#token");
+        					xhr.setRequestHeader($token.data("token-name"), $token.val());
+        				},
+        				success : function(data){
+        					
+        					var arr = data.documentElement;
+        					a = arr.querySelectorAll("item")[0].innerHTML;
+        					b = arr.querySelectorAll("item")[1].innerHTML ;
+        					
+        					
+        					
+        					
+        					if(a =='1'){
+        						console.log("메일을 보냈습니다.");
+        						alert("메일을 보냈습니다.");
+        						
+        						document.getElementById("emailcerti").value = b;
+        						arrInput1.push(arrInput1.length);
+        						arrInputValue1.push("");
+        						display1();
+        					}
+        				},
+        				error:function(){
+        					alert("Error 관리자에게 문의하세요");
+        				} 
+          	  });
+          	  }
+          	  
+        	  }
+          
+          
+          function fn_emailCheck(){
+        	  var email1 = $('#email1').val();
+        	  var email2 = $('#email2').val();
+        	 
+        	  if(email1 == ''){
+        		  alert('이메일을 입력하세요.');
+        		  document.getElementById('email1').focus();
+        	  }
+        	  else if(email2 ==''){
+        		  alert('도메인을 입력하세요');
+        		  document.getElementById('email2').focus();
+        	  }
+        	  else{
+        		          	  
+        	  $.ajax({
+        		  	url : "/member/emailCheck",
+        			type : "post",
+        			
+        			data : { 
+        				email1 : $("#email1").val(),
+        				email2 : $("#email2").val()
+        				},
+      				beforeSend : function(xhr){
+      					var $token = $("#token");
+      					xhr.setRequestHeader($token.data("token-name"), $token.val());
+      				},
+      				success : function(data){
+      					var a =new XMLSerializer().serializeToString(data.documentElement);
+      					
+      					
+      					if(a == '<Integer>1</Integer>'){
+      						console.log("중복된 이메일");
+      						alert("중복된 이메일입니다.");
+      					}else if(a == '<Integer>0</Integer>'){	
+      						document.getElementById("emailCheck1").value = 'Y'; 
+      						console.log("사용가능한 이메일");
+      						alert("사용가능한 이메일입니다.");
+      					
+      					}
+      				},
+      				error:function(){
+      					alert("Error 관리자에게 문의하세요");
+      				} 
+        	  });
+        	  }
+        	  
+          }
+          
+          
           function fn_idCheck(){
         	  var userid = $('#userid').val();
         	  var checkid = /^[a-zA-Z0-9]{4,12}$/;
@@ -249,6 +381,7 @@
       						console.log("중복된 아이디");
       						alert("중복된 아이디입니다.");
       					}else if(a == '<Integer>0</Integer>'){	
+      						document.getElementById("idCheck1").value = 'Y'; 
       						console.log("사용가능한 아이디");
       						alert("사용가능한 아이디입니다.");
       					}
@@ -324,7 +457,7 @@
               		return false;
               	}
               	if($('#email2').val()==''){
-              		alert('이메일을 입력하세요');
+              		alert('도메인을 입력하세요');
               		document.getElementById('email2').focus();
               		return false;
               	}
@@ -336,7 +469,18 @@
               		alert('개인정보 수집,이용에 동의해주세요');
               		return false;
               	}
-              	
+              	if($('#idCheck1').val()=='N'){
+              		alert('아이디 중복체크를 해주세요.');
+              		return false;
+              	}
+              	if($('#emailCheck1').val()=='N'){
+              		alert('아이디 중복체크를 해주세요.');
+              		return false;
+              	}
+              	if($('#emailcerti').val()!=$('#emailcerti1').val()){
+              		alert('인증번호가 다릅니다.');
+              		return false;
+              	}
               	return true;
               });
               });

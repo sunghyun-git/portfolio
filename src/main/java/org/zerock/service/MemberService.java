@@ -11,15 +11,17 @@ public interface MemberService {
 	public void join(MemberVO member);
 	public MemberVO read(String userid);
 	public void update(MemberVO member);
-	public int idCheck(String userid);
 	
+	public int idCheck(String userid);
+	public int emailCheck(String email);
+	public List<String> emailcertification(String email,String userid) throws Exception;
 	
 	public List<MemberLikeVO> readlike(String userid);
 	public void insertlike(MemberLikeVO memberlikevo);
 	
 	public void deletelike(MemberLikeVO memberlikevo);
 	//이메일발송
-	public void sendEmail(MemberVO vo,String div) throws Exception;
+	public void sendEmail(MemberVO vo,String div,String check) throws Exception;
 	//비밀번호 찾기
 	public void findPw(MemberVO vo,HttpServletResponse response) throws Exception;
 	

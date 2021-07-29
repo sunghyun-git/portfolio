@@ -112,6 +112,37 @@ public class MemberController {
 		service.deletelike(vo);
 		return "redirect:/restaurant?cid="+cid;
 	}
+	@ResponseBody 
+	@RequestMapping(value = "/emailcertification", method = RequestMethod.POST)
+	public List<String> emailcertification(HttpServletRequest request,RedirectAttributes rttr,Model model) throws Exception {
+		String email1 = request.getParameter("email1");
+		
+		String email2 = request.getParameter("email2");
+		
+		String email = email1 +"@"+email2;
+		String userid = request.getParameter("userid");
+		
+		
+		List<String> a=service.emailcertification(email, userid);
+		
+		return a;
+	}
+	
+	@ResponseBody 
+	@RequestMapping(value = "/emailCheck", method = RequestMethod.POST)
+	public Integer emailChk(HttpServletRequest request) throws Exception {
+		String email1 = request.getParameter("email1");
+		
+		String email2 = request.getParameter("email2");
+		
+		String email = email1 +"@"+email2;
+		
+		Integer result = service.emailCheck(email);
+		log.info("result : "+ result);
+		
+		return result;
+	} 
+	
 	
 	@ResponseBody 
 	@RequestMapping(value = "/idCheck", method = RequestMethod.POST)

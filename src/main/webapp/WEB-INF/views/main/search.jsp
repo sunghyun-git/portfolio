@@ -65,7 +65,7 @@
             </c:if>
             <c:if test="${count != 0 }">
             
-            <div id="map" align="right" style="align-content:center; width:100%;height:600px; "></div>
+            <center><div id="map" align="right" style="width:600px;height:500px; position:relative; overflow:hidden;  align-content:center;"></div></center>
             </c:if>
              <c:forEach var="restaurant" items="${list}">
         <ul class="list" onclick="location.href='../restaurant?cid=${restaurant.cid }'">

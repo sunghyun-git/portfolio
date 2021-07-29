@@ -10,6 +10,7 @@ public interface MemberMapper {
 	public void insert(MemberVO membervo);
 	public void update(MemberVO membervo);
 	public int idCheck(String userid);
+	public int emailCheck(String email);
 	
 	public List<MemberLikeVO> readlike(String userid);
 	public void insertlike(MemberLikeVO memberlikevo);

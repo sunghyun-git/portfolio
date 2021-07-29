@@ -1,6 +1,7 @@
 package org.zerock.service;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +34,29 @@ public class MemberServiceImpl implements MemberService {
 	private PasswordEncoder pwencoder;
 
 	@Override
+	public List<String> emailcertification(String email,String userid) throws Exception {
+		
+		String check = "";
+		for (int i = 0; i < 6; i++) {
+			check += (char) ((Math.random() * 26) + 97);
+		}
+		MemberVO vo = new MemberVO();
+		vo.setUserid(userid);
+		vo.setEmail(email);
+		sendEmail(vo, "email", check);
+		List<String> a = new ArrayList<String>();
+		a.add("1");
+		a.add(check);
+		return a;
+	}
+	//이메일 중복 체크
+	@Override
+	public int emailCheck(String email) {
+		int result = mapper.emailCheck(email);
+		return result;
+	}
+	
+	@Override
 	public List<MemberLikeVO> readlike(String userid) {
 		return mapper.readlike(userid);
 
@@ -61,7 +85,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 	// 이메일발송
 	@Override
-	public void sendEmail(MemberVO vo, String div) throws Exception {
+	public void sendEmail(MemberVO vo, String div,String check) throws Exception {
 		String charSet = "utf-8";
 		String hostSMTP = "smtp.gmail.com"; 
 		String hostSMTPid = "eatchelin@gmail.com";
@@ -79,6 +103,14 @@ public class MemberServiceImpl implements MemberService {
 			msg += vo.getUserid() + "님의 임시 비밀번호 입니다. 비밀번호를 변경하여 사용하세요.</h3>";
 			msg += "<p>임시 비밀번호 : ";
 			msg += vo.getPwd() + "</p></div>";
+		}
+		if(div.equals("email")) {
+			subject = "잇 슐랭 이메일 인증 메일 입니다.";
+			msg += "<div align='center' style='border:1px solid black; font-family:verdana'>";
+			msg += "<h3 style='color: blue;'>";
+			msg += vo.getUserid() + "님의 이메일 인증 번호 입니다.</h3>";
+			msg += "<p>이메일 인증 번호  : ";
+			msg += check + "</p></div>";
 		}
 		
 		String mail = vo.getEmail();
@@ -124,7 +156,7 @@ public class MemberServiceImpl implements MemberService {
 			}
 			vo=ck;
 			vo.setPwd(pw);
-			sendEmail(vo, "findpw");
+			sendEmail(vo, "findpw","");
 
 			// 비밀번호 변경
 			update(vo);

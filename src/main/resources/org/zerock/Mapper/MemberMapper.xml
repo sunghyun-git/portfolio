@@ -63,4 +63,8 @@ update food_member set pwd = #{pwd} where userid = #{userid}
 <select id="findid" resultMap="memberMap">
 select * from food_member where username = #{username} and email = #{email}
 </select>
+
+<select id="emailCheck" resultType="int">
+select count(*) from food_member where email = #{email}
+</select>
 </mapper>
