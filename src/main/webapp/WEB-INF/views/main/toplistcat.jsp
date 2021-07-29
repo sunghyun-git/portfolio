@@ -7,8 +7,11 @@
     <head>
         <meta charset="UTF-8">
         <title>게시물 추천 리스트</title>
+        <link rel="stylesheet" href="/resources/css/main_view.css" type="text/css">
         <link rel="stylesheet" href="/resources/css/top_list.css">
     </head>
+    <%@ include file="../includes/header2.jsp"%>
+    
     <body>
         <header>
             <div class="text-area">
@@ -33,6 +36,13 @@
         </ul>
        
         </c:forEach>
-        
+        <script type="text/javascript">
+function go(){
+	var f = document.logoutform;
+
+
+	f.submit();
+}
+</script>
     </body>
 </html>

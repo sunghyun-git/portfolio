@@ -17,8 +17,9 @@ public class RestaurantVO {
 	private int reviewcount;
 	private int views;
 	private double rating;
+	private int likecount;
 	private List<RestaurantAttachVO> attachList;
-
+	
 	
 	
 }

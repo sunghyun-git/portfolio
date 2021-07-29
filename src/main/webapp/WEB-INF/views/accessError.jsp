@@ -6,13 +6,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>접근이 제한된 페이지 입니다.</title>
 </head>
 <body>
-<h1>Access Denied Page</h1>
+<h1>접근이 제한된 페이지 입니다.</h1>
+<h2>관리자에게 문의하세요.</h2>
 
-<h2><c:out value="${SPRING_SECURITY_403_EXCEPTION.getMessage()}"/></h2>
-
-<h2><c:out value="${msg}"/></h2>
 </body>
 </html>

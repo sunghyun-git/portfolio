@@ -146,7 +146,7 @@ display1();
 <hr>
 <h1>음식점 메인 사진</h1>
 <br>
-
+<input type="file" accept="image/*" onchange='chk_file_type(this)' name='uploadFile' multiple>
 <c:if test="${ Restaurant.mainphotourl!=null}">
 <h1>이미 쓰고있는 사진</h1>
 <br>
@@ -154,7 +154,7 @@ display1();
 </c:if>
 <br><br>
 
-<input type="file" accept="image/*" onchange='chk_file_type(this)' name='uploadFile' multiple>
+
 <div class='uploadResult'>
 		<ul><!-- 첨부 파일의 이름을 목록으로 출력 -->
 		</ul>

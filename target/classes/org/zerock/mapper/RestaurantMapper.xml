@@ -217,7 +217,9 @@
 </update>
 
 <update id="updaterating">
- update food_restaurant  set rating =(select avg(rw_rating) from food_restaurant_review where cid = food_restaurant.cid);
+ update food_restaurant  set rating =(select avg(rw_rating) from food_restaurant_review where cid = food_restaurant.cid)
 </update>
-
+<update id="updatelikecount">
+update food_restaurant set likecount = (select count(*) from food_member_like where cid = food_restaurant.cid) where cid=#{cid}
+</update>
 </mapper>

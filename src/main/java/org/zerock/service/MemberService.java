@@ -14,7 +14,7 @@ public interface MemberService {
 	
 	public int idCheck(String userid);
 	public int emailCheck(String email);
-	public List<String> emailcertification(String email,String userid) throws Exception;
+	public List<String> emailcertification(String email) throws Exception;
 	
 	public List<MemberLikeVO> readlike(String userid);
 	public void insertlike(MemberLikeVO memberlikevo);

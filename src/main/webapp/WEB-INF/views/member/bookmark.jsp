@@ -37,7 +37,7 @@
 		<li class="item mousect-effect" >
 			<div class="left" onclick="location.href='../restaurant?cid=${restaurant.cid }'">
 				<img src="${restaurant.mainphotourl}" height="150" width="150" />
-				<div class="name"><h3>${restaurant.placename }</h3>${restaurant.catename }</div>
+				<div class="name"><h3>${restaurant.placename } (${restaurant.rating })</h3>${restaurant.catename }</div>
 			</div>
 			<div class="right">
 				<a href="../member/likedelete?cid=${restaurant.cid }">좋아요 취소<img src="/resources/img/icon/right_arrow.svg" /></a>

@@ -247,11 +247,8 @@
         	  var email2 = $('#email2').val();
         	  var userid = $('#userid').val();
         	  var checkid = /^[a-zA-Z0-9]{4,12}$/;
-        	  if(!checkid.test(userid)){
-        		  alert("인증을 위해 아이디를 입력하세요.");
-        		  document.getElementById('userid').focus();
-        	  }
-        	  else if(email1 == ''){
+        	  
+        	  if(email1 == ''){
         		  alert('이메일을 입력하세요.');
         		  document.getElementById('email1').focus();
         	  }
@@ -263,6 +260,7 @@
         		  alert('이메일 중복 체크를 해주세요.');
         	  }
         	  else if($('#emailCheck1').val()=='Y'){
+        		  alert('메일 전송중입니다.');
         		  $.ajax({
           		  	url : "/member/emailcertification",
           			type : "post",
@@ -287,7 +285,7 @@
         					
         					if(a =='1'){
         						console.log("메일을 보냈습니다.");
-        						alert("메일을 보냈습니다.");
+        						alert("메일 전송 했습니다.");
         						
         						document.getElementById("emailcerti").value = b;
         						arrInput1.push(arrInput1.length);
@@ -474,7 +472,7 @@
               		return false;
               	}
               	if($('#emailCheck1').val()=='N'){
-              		alert('아이디 중복체크를 해주세요.');
+              		alert('이메일 중복체크를 해주세요.');
               		return false;
               	}
               	if($('#emailcerti').val()!=$('#emailcerti1').val()){

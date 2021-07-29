@@ -50,6 +50,8 @@ public interface RestaurantMapper {
 	public void updateviewscount(Integer cid);
 	
 	public void updaterating(Integer cid);
+	
+	public void updatelikecount(Integer cid);
 	//delete
 	
 	public void deleteRestaurant(Integer cid);

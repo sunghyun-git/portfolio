@@ -16,6 +16,8 @@ import org.zerock.domain.MemberLikeVO;
 import org.zerock.domain.MemberVO;
 import org.zerock.mapper.MemberAuthMapper;
 import org.zerock.mapper.MemberMapper;
+import org.zerock.mapper.RestaurantMapper;
+
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -27,21 +29,22 @@ public class MemberServiceImpl implements MemberService {
 
 	@Setter(onMethod_ = { @Autowired })
 	private MemberMapper mapper;
-
+	@Setter(onMethod_ = { @Autowired })
+	private RestaurantMapper Rmapper;
 	@Setter(onMethod_ = { @Autowired })
 	private MemberAuthMapper authMapper;
 	@Setter(onMethod_ = @Autowired)
 	private PasswordEncoder pwencoder;
 
 	@Override
-	public List<String> emailcertification(String email,String userid) throws Exception {
+	public List<String> emailcertification(String email) throws Exception {
 		
 		String check = "";
 		for (int i = 0; i < 6; i++) {
 			check += (char) ((Math.random() * 26) + 97);
 		}
 		MemberVO vo = new MemberVO();
-		vo.setUserid(userid);
+		
 		vo.setEmail(email);
 		sendEmail(vo, "email", check);
 		List<String> a = new ArrayList<String>();
@@ -108,7 +111,7 @@ public class MemberServiceImpl implements MemberService {
 			subject = "잇 슐랭 이메일 인증 메일 입니다.";
 			msg += "<div align='center' style='border:1px solid black; font-family:verdana'>";
 			msg += "<h3 style='color: blue;'>";
-			msg += vo.getUserid() + "님의 이메일 인증 번호 입니다.</h3>";
+			msg += vo.getEmail() + "님의 이메일 인증 번호 입니다.</h3>";
 			msg += "<p>이메일 인증 번호  : ";
 			msg += check + "</p></div>";
 		}
@@ -178,12 +181,13 @@ public class MemberServiceImpl implements MemberService {
 			}
 		}
 		mapper.insertlike(memberlikevo);
+		Rmapper.updatelikecount(memberlikevo.getCid());
 	}
 
 	@Override
 	public void deletelike(MemberLikeVO memberlikevo) {
 		mapper.deletelike(memberlikevo);
-
+		Rmapper.updatelikecount(memberlikevo.getCid());
 	}
 
 	@Transactional
